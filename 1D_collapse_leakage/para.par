@@ -1,0 +1,129 @@
+ &filelist
+        base_filename='./output/mpileak_s40_LS220_amr10_nx16_noheat_fixed'
+        typefilelog='special'
+/
+
+ &savelist
+        !dtsave(1)=2.0d-2
+        time_between_print=1.0d0 ! screen output every 1 second
+        dtsave(1)=2.03001708d01 ! For log file, Note: time_gf = 2.03001708d05 
+        dtsave(2)=10.03001708d02 ! Note: time_gf = 2.03001708d05 
+        !ditsave(2)=50 ! output dat at every N steps
+        !ditsave(1)=50 ! output dat at every N steps
+        itsave(1,1)=0
+        itsave(1,2)=0
+ /
+
+ &stoplist
+        !it_max=10000
+        time_max = 2.03001708d06  ! Note: time_gf = 2.03001708d05  
+        !wall_time_max=1.0d2
+ /
+
+ &atmo_list
+        atmo_type = 'idealgas'
+        atmo_gamma = 1.6667d0
+        atmo_adiab = 0.468d0
+        small_rho = 1.0d0
+        small_rho_fac = 0.1d0
+/
+
+ &eos_polytrope_list
+        eos_gamma = 2.0d0
+        eos_adiab = 1.0d-10
+/
+
+ &eos_hybrid_list
+        eos_gamma_1 = 1.31d0
+        eos_gamma_2 = 2.50d0
+        !eos_gamma_th = 1.33d0
+        eos_gamma_th = 1.5d0
+        ! note that the parameter in hybrid eos are in cgs
+/
+
+ &eos_tabulated_list
+        eos_precision = 1.0d-9
+
+        eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/LS180_234r_136t_50y_analmu_20091212_SVNr26.h5"
+!        eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/LS220_240r_140t_50y_analmu_20120628_SVNr28.h5"
+!        eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/LS220_234r_136t_50y_analmu_20091212_SVNr26.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/LS375_234r_136t_50y_analmu_20091212_SVNr26.h5"
+        !
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/BHB_lEOS_rho234_temp180_ye60_version_1.02_20140422.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/BHB_lpEOS_rho234_temp180_ye60_version_1.02_20140422.h5"
+        !
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/Hempel_DD2EOS_rho234_temp180_ye60_version_1.1_20120817.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/Hempel_FSGEOS_rho234_temp180_ye60_version_1.1_20120817.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/Hempel_IUFEOS_rho234_temp180_ye60_version_1.1_20140129.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/Hempel_NL3EOS_rho234_temp180_ye60_version_1.1_20120817.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/Hempel_TMAEOS_rho234_temp180_ye60_version_1.1_20120817.h5"
+        !
+!        eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/Hempel_SFHoEOS_rho222_temp180_ye60_version_1.1_20120817.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/Hempel_SFHxEOS_rho234_temp180_ye60_version_1.1_20120817.h5"
+        !
+        !eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/HShenEOS_rho220_temp180_ye65_version_1.1_20120817.h5"
+        !eos_table_name         =        !"/users/ho-yin.ng/eos_gr1d/HShen_HyperonEOS_rho220_temp180_ye65_version_1.1_20131007.h5"
+        !
+!        eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/GShen_NL3EOS_rho280_temp180_ye52_version_1.1_20120817.h5"
+!        eos_table_name         =        "/users/ho-yin.ng/eos_gr1d/GShenFSU_2.1EOS_rho280_temp180_ye52_version_1.1_20120824.h5"
+
+
+/ 
+ &grhd_simple_leakage_list
+        do_heating = .true. !.False.    true for using evan's simple absorption
+        heat_fac = 1.0d0
+        do_NNBrem = .True.
+
+/
+
+ &grhd_ccsn_leakage_mpi_list
+        use_GR=.True.
+/
+
+ &cfc_solver_list
+        cfc_tol = 1.0d-8, 1.0d-8, 5.0d-8
+        ! print the status of the metric solver each N iterations
+        cfc_print = 10
+        cfc_it_max = 100
+        !cfc_dt_update=2.03001708d00 ! Note: time_gf = 2.03001708d05 
+        cfc_dit_update=1 ! update metric at every N steps
+/
+
+ &methodlist
+        !time_stepper = 'fourstep'
+        time_integrator = 'ssprk2'
+        flux_scheme = 20*'hll'
+        limiter=20*'ppm'
+!        limiter=20*'wenozp5'
+        !flatsh = .True.
+        !flatcd = .True.
+        fix_small_values = .true.
+        small_values_method='replace'
+        positivity_preserving=.True.
+ /
+
+ &boundlist
+        nghostcells = 3
+        typeboundary_min1 = 'symm','asymm', 'symm'
+        typeboundary_max1 = 'symm','noinflow', 'symm'
+ /
+
+ &meshlist
+        refine_criterion=0
+        refine_max_level=10  !12
+     !   refine_threshold=20*0.1d0
+        !derefine_ratio = 0.5d0
+        !typeprolonglimit='minmod'
+!        itfixgrid = 1
+        block_nx1=16
+        domain_nx1=128
+        iprob=1
+        xprobmin1=0.0d0
+        xprobmax1=7.793d3  !4.4d4
+ /
+
+ &paramlist
+       courantpar=0.4
+       typecourant='minimum'
+       !slowsteps = 10
+ /
